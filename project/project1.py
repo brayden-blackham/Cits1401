@@ -7,27 +7,27 @@ cor = []
 
 
 def main(csvfile):
-
+    ## Helper Varibles.
     csvLines = readFile(csvfile)
-    #print("csvLines: ", csvLines)
     classes = getClasses(csvLines)
-    #print("classes: ", classes)
+    checkValidity(csvLines,classes)
     markDict = createDict(csvLines, classes)
-    #print("\nmarkDict: ",markDict)
     rawMarks = createRawMarks(csvLines)
-    #print("\nrawMarks: ",rawMarks)
+
+    ## Functions to Fill the final lists.
     mn = minimum(rawMarks, markDict)
-    print("\nmn: ", mn)
+    #print("\nmn: ", mn)
     mx = maximum(rawMarks, markDict)
-    print("\nmx: ", mx)
+    #print("\nmx: ", mx)
     avg = average(rawMarks, markDict)
-    print("\navg: ", avg)
+    #print("\navg: ", avg)
     std = stdDev(rawMarks, markDict)
-    print("\nstd: ", std)
+    #print("\nstd: ", std)
     cor = spCor(rawMarks, markDict, classes)
-    print("\ncor: ", cor)
+    #print("\ncor: ", cor)
+    return mn,mx,avg,std,cor
 
-
+### START: HELPER FUNCTIONS ###
 def readFile(csvfile):
     f = open(csvfile)
     lines = []
@@ -44,6 +44,21 @@ def getClasses(csvLines):
     del classes[0]
     del csvLines[0]
     return classes
+
+
+def checkValidity(csvLines,classes):
+    names = []
+    for line in csvLines:
+        names.append(line[0])
+    ##Check for duplicate Names
+    for i in range(0,len(names)):
+        for j in range(0,len(names)):
+            ## If there are duplicate names, Check for same scores and Print ERROR and exit()
+            if (i != j and names[i] == names[j]):
+                for k in range(2,len(csvLines[0])):
+                    if (csvLines[i][k] == csvLines[j][k]):
+                        print("ERROR: SAME NAME AND SAME SUBJECT SCORE; Name: ", names[i],",Subject ",classes[k-2],", Score: ", csvLines[i][k])
+                        exit()
 
 
 def createDict(csvLines, classes):
@@ -70,8 +85,9 @@ def createRawMarks(csvLines):
     rawMarks = csvLines
     return rawMarks
 
-# A funtion to find the minimum mark
+### END: HELPER FUNCTIONS ###
 
+### START: RETURN FUNCTIONS ###
 
 def minimum(rawMarks, markDict):
     minMarks = []
@@ -175,9 +191,8 @@ def calculateRank(markDict, classes):
                 totalRank = each + 1
                 markDict[name]["TotalRank"] = totalRank
                 break
-                
 
-
+            
 def calculateSumOfDifSq(markDict, classes):
     sumOfDifSqTotal= []
     for clas in classes:
@@ -191,5 +206,19 @@ def calculateSumOfDifSq(markDict, classes):
         sumOfDifSqTotal.append(sumOfDifSq)
     return sumOfDifSqTotal
 
+### END: RETURN FUNCTIONS ###
 
-main('project/sample_student_marks.csv')
+
+mn,mx,avg,std,cor = main('project/sample_same_noerror.csv')
+print(mn)
+print(mx)
+print(avg)
+print(std)
+print(cor)
+
+mn,mx,avg,std,cor = main('project/sample_student_marks.csv')
+print(mn)
+print(mx)
+print(avg)
+print(std)
+print(cor)

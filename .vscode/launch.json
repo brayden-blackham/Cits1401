@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Current File",
             "type": "python",
@@ -12,10 +13,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Current File",
+            "name": "Python: Project1",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "project/project1.py",
             "console": "integratedTerminal"
         }
     ]
